@@ -1,0 +1,38 @@
+{
+    "name": "hrevert/ht-messaging",
+    "description": "A Zend Framework 2 module based on ZfcUser which enables private messaging between users",
+    "type": "library",
+    "keywords": [
+        "zf2",
+        "module",
+        "zendframework"
+    ],
+    "homepage": "https://github.com/hrevert/HtMessaging",
+    "authors": [
+        {
+            "name": "Hrevert Technologies",
+            "email": "info@hrevert.com"
+        },
+        {
+            "name": "ojhaujjwal",
+            "email": "bring2uo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "zendframework/zendframework": "2.*",
+        "zf-commons/zfc-user": "0.1.*",
+        "zf-commons/zfc-base": "0.1.*"
+    },
+    "suggest": {
+        "hrevert/ht-profile-image": "To display images of user in messages",
+    },
+    "autoload": {
+        "psr-0": {
+            "HtMessaging": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}

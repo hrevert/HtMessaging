@@ -17,10 +17,17 @@ class MessagingController
      */
     protected $messageReceiverMapper;
 
+    /**
+     * @var HtMessaging\Options\ModuleOptions
+     */
+    protected $moduleOptions;
+
 
     public function composeAction()
     {
         $form = $this->getServiceLocator()->get('HtMessaging\MessageForm');
+
+        $messageSent = false;
 
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -28,7 +35,8 @@ class MessagingController
         }
 
         return array(
-            'form' => $form
+            'form' => $form,
+            'messageSent' => $messageSent
         );
     }
 
@@ -100,7 +108,11 @@ class MessagingController
 
     public function deleteAction()
     {
-        
+        $options = $this->getModuleOptions();
+
+        if (!$options->getAllowDeleteMessage()) {
+            return $this->notFoundAction();
+        }
     }
 
     protected function getMessageMapper()
@@ -119,5 +131,14 @@ class MessagingController
         }
         
         return $this->messageReceiverMapper;         
+    }
+
+    protected function getModuleOptions()
+    {
+        if (!$this->moduleOptions) {
+            $this->moduleOptions = $this->getServiceLocator()->get('HtMessaging\ModuleOptions');
+        }
+
+        return $this->moduleOptions;
     }
 }
