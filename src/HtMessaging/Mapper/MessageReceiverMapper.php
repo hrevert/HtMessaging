@@ -10,6 +10,7 @@ use Zend\Db\Sql\Expression as SqlExpression;
 use Zend\Db\Sql\Select;
 use ArrayObject;
 use Zend\Stdlib\Hydrator\ObjectProperty;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class MessageReceiverMapper extends AbstractDbMapper
 {
@@ -41,6 +42,7 @@ class MessageReceiverMapper extends AbstractDbMapper
     {
         $select = $this->getSelect();
         $select->where(array('message_id' => $messageId));
+
         return $this->select($select);        
     }
 
@@ -89,6 +91,17 @@ class MessageReceiverMapper extends AbstractDbMapper
         $messageReceiver->setSentDateTime(new SqlExpression("NOW()"));
         $result = parent::insert($messageReceiver);
         $messageReceiver->setId($result->getGeneratedValue());
+
         return $result;
+    }
+
+    public function update(MessageReceiverInterface $messageReceiver, $where = null, $tableName = null, HydratorInterface $hydrator = null)
+    {
+        if (!$where) {
+            $where = array('id' => $messageReceiver->getId());
+        }
+
+        return parent::update($entity, $where, $tableName, $hydrator);
+
     }
 }
