@@ -4,7 +4,9 @@ namespace HtMessaging;
 
 use Zend\Stdlib\AbstractOptions;
 
-class ModuleOptions extends AbstractOptions
+class ModuleOptions extends AbstractOptions implements 
+    EntityOptionsInterface,
+    MultipleReceiversOptionsInterface
 {
     protected $displayUserImage = false;
 
