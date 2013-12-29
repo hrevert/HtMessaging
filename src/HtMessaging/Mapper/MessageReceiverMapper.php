@@ -5,12 +5,14 @@ namespace HtProfileImage\Mapper;
 use ZfcBase\Mapper\AbstractDbMapper;
 use HtProfileImage\Entity\MessageInterface;
 use HtProfileImage\Entity\MessageReceiverInterface;
-use ZfcUser\Entity\UserInterface;
+use HtProfileImage\Entity\MessageReceiver;
 use Zend\Db\Sql\Expression as SqlExpression;
 use Zend\Db\Sql\Select;
 use ArrayObject;
 use Zend\Stdlib\Hydrator\ObjectProperty;
 use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
 
 class MessageReceiverMapper extends AbstractDbMapper
 {
@@ -51,19 +53,57 @@ class MessageReceiverMapper extends AbstractDbMapper
         return $this->findByMessageId($message->getId());
     }
 
-    public function findByReceiverId($receiverId)
+    public function findByReceiverId($receiverId, $paginated = false)
     {
         $select = $this->getSelect();
         $select->where(array('receiver_id' => $receiverId));
         $this->joinWithMessage($select);
 
+        if ($paginated) {
+            return new Paginator(new DbSelect($select, $this->getDbAdapter()));
+        }
+
         return $this->select($select, new ArrayObject, new ObjectProperty);
     }
 
-
-    public function findByReceiver(UserInterface $receiver)
+    public function findStarredMessagesByReceiverId($receiverId, $paginated = false)
     {
-        return $this->findByReceiverId($receiver->getId());
+        $select = $this->getSelect();
+        $select->where(array('receiver_id' => $receiverId, 'starred_or_not' => MessageReceiver::STARRED));
+        $this->joinWithMessage($select);
+
+        if ($paginated) {
+            return new Paginator(new DbSelect($select, $this->getDbAdapter()));
+        }
+
+        return $this->select($select, new ArrayObject, new ObjectProperty);        
+    }
+
+    public function findImportantMessagesByReceiverId($receiverId, $paginated = false)
+    {
+        $select = $this->getSelect();
+        $select->where(array('receiver_id' => $receiverId, 'important_or_not' => MessageReceiver::IMPORTANT));
+        $this->joinWithMessage($select);
+
+        if ($paginated) {
+            return new Paginator(new DbSelect($select, $this->getDbAdapter()));
+        }
+
+        return $this->select($select, new ArrayObject, new ObjectProperty);          
+    }
+
+
+    public function findUnreadMessagesByReceiverId($receiverId, $paginated = false)
+    {
+        $select = $this->getSelect();
+        $select->where(array('receiver_id' => $receiverId, 'received_or_not' => MessageReceiver::RECEIVED));
+        $this->joinWithMessage($select);
+
+        if ($paginated) {
+            return new Paginator(new DbSelect($select, $this->getDbAdapter()));
+        }
+
+        return $this->select($select, new ArrayObject, new ObjectProperty);          
     }
 
 

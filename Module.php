@@ -1,8 +1,26 @@
 <?php
 namespace HtMessaging;
 
+use Zend\Mvc\MvcEvent;
+
 class Module
 {
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        $sm = $e->getApplication()->getServiceManager();
+        $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractController', 'dispatch', function($e) use ($sm) {
+            $controller = $e->getTarget();
+            $controllerClass = get_class($controller);
+            $moduleNamespace = substr($controllerClass, 0, strpos($controllerClass, '\\'));
+            if ($moduleNamespace === __NAMESPACE__) {
+                if (!$sm->get('zfcuser_auth_service')->hasIdentity()) {
+                    return $controller->plugin("redirect")->toRoute($sm->get('HtMessaging\ModuleOptions')->getLoginRoute());
+                }
+            }
+        }); 
+    }
+
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
@@ -31,10 +49,7 @@ class Module
                     $moduleConfig = isset($config['htmessaging']) ? $config['htmessaging'] : array();
                     return new Options\ModuleOptions($moduleConfig);
                 },
-                'HtMessaging\MessageForm' => function ($sm) {
-                    $form = new Form\MessageForm($sm->get('HtMessaging\ModuleOptions'));
-                    return $form;
-                },
+                'HtMessaging\MessageForm' => 'HtMessaging\Service\MessageFormFactory',
                 'HtMessaging\MessageMapper' => function ($sm) {
                     $options = $sm->get('HtMessaging\ModuleOptions');
                     $mapper = new Mapper\MessageMapper();

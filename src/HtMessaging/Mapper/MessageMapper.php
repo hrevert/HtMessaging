@@ -6,6 +6,8 @@ use ZfcBase\Mapper\AbstractDbMapper;
 use HtProfileImage\Entity\MessageInterface;
 use ZfcUser\Entity\UserInterface;
 use Zend\Db\Sql\Expression as SqlExpression;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
 
 class MessageMapper extends AbstractDbMapper
 {
@@ -18,10 +20,15 @@ class MessageMapper extends AbstractDbMapper
         return $this->select($select)->current();
     }
 
-    public function findBySenderId($senderId)
+    public function findBySenderId($senderId, $paginated = false)
     {
         $select = $this->getSelect();
         $select->where(array('sender_id' => $senderId));
+
+        if ($paginated) {
+            return new Paginator(new DbSelect($select, $this->getDbAdapter()));
+        }
+
         return $this->select($select);
     }
 

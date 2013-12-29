@@ -18,6 +18,10 @@ class ModuleOptions extends AbstractOptions implements
 
     protected $messageReceiverEntityClass = "HtMessaging\Entity\MessageReceiver";
 
+    protected $loginRoute = "zfcuser\login";
+
+    protected $allowDeleteMessage = true;
+
     public function setDisplayUserImage($displayUserImage)
     {
         $this->displayUserImage = $displayUserImage;
@@ -66,5 +70,25 @@ class ModuleOptions extends AbstractOptions implements
     public function getMessageReceiverEntityClass()
     {
         return $this->messageReceiverEntityClass;
+    }
+
+    public function setLoginRoute($loginRoute)
+    {
+        $this->loginRoute = $loginRoute;
+    }
+
+    public function getLoginRoute($loginRoute)
+    {
+        return $this->loginRoute;
+    }
+
+    public function setAllowDeleteMessage($allowDeleteMessage)
+    {
+        $this->allowDeleteMessage = $allowDeleteMessage;
+    }
+
+    public function getAllowDeleteMessage()
+    {
+        return $this->allowDeleteMessage;
     }
 }

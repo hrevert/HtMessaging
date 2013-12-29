@@ -45,7 +45,7 @@ class MessageForm extends ProvidesEventsForm
             )
         ));
 
-        $receiver = new Element\Select('receiver');
+        $receiver = new Element\Select('receiver_id');
         $receiver->setLabel('Receiver');
         $receiver->setAttributes(array(
             'class' => 'form-control',
