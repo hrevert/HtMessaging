@@ -4,6 +4,8 @@ namespace HtMessaging\Form;
     
 use ZfcBase\InputFilter\ProvidesEventsInputFilter;
 use Zend\Filter\Int;
+use HtMessaging\Options\MultipleReceiversOptionsInterface;
+use Zend\Validator\NotEmpty;
 
 class MessageInputFilter extends ProvidesEventsInputFilter
 {
@@ -29,7 +31,20 @@ class MessageInputFilter extends ProvidesEventsInputFilter
                 array('name' => 'StringTrim'),
             ),
             'validators' => array(
-            
+                array(
+                    'name' => 'NotEmpty',
+                    'options' => array(
+                        'messages' => array(
+                            NotEmpty::IS_EMPTY => 'Please enter message subject'
+                        )
+                    )
+                ),
+                array(
+                    'name' => 'StringLength',
+                    'options' => array(
+                        'max' => 64
+                    )
+                )
             )
         ));
 
@@ -40,7 +55,17 @@ class MessageInputFilter extends ProvidesEventsInputFilter
 
         $this->add(array(
             'name' => 'message_text',
-            'required' => true
+            'required' => true,
+            'validators' => array(
+                array(
+                    'name' => 'NotEmpty',
+                    'options' => array(
+                        'messages' => array(
+                            NotEmpty::IS_EMPTY => 'Please enter a body of message '
+                        )
+                    )
+                )
+            )
         ));
 
         if ($this->getOptions()->getEnableMultipleReceivers()) {

@@ -2,7 +2,7 @@
 
 namespace HtMessaging\Service;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use ZfcBase\EventManager\EventProvider;
 use HtMessaging\Entity\MessageInterface;
 use Zend\Db\Sql\Select;
@@ -15,14 +15,19 @@ class MessagingService extends EventProvider implements ServiceLocatorAwareInter
      */
     protected $moduleOptions;
 
+    protected $messageMapper;
+
+    protected $messageReceiverMapper;
+
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-    protected function createMessage(array $postData)
+    public function createMessage(array $postData)
     {
         $form = $this->getServiceLocator()->get('HtMessaging\MessageForm');
         $messageClass = $this->getOptions()->getMessageEntityClass();
         $message = new $messageClass;
         $form->bind($message);
+        $postData['sender_id'] = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity()->getId();
         $form->setData($postData);
         if (!$form->isValid()) {
             return false;

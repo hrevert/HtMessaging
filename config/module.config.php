@@ -1,4 +1,5 @@
 <?php
+    
 return array(
     'asset_manager' => array(
         'resolver_configs' => array(
@@ -12,9 +13,9 @@ return array(
             'HtMessaging\DbAdapter' => 'zfcuser_zend_db_adapter'
         )
     ),
-    'controller' => array(
+    'controllers' => array(
         'invokables' => array(
-        
+            'htmessaging' => 'HtMessaging\Controller\MessagingController',
         )
     ),
     'router' => array(
@@ -24,12 +25,28 @@ return array(
                 'options' => array(
                     'route' => '/messaging',
                     'defaults' => array(
-                    
+                        'controller' => 'htmessaging',
+                        'action' => 'list'
                     )
                 ),
-                'may_termainate' => true,
+                'may_terminate' => true,
                 'child_routes' => array(
-                
+                    'list' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/[:type[/]]',
+                        )
+                    ),
+                    'compose' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/compose',
+                            'defaults' => array(
+                                'controller' => 'htmessaging',
+                                'action' => 'compose'
+                            )
+                        )                        
+                    )
                 )
             )
         )

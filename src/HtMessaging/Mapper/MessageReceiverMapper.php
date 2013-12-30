@@ -1,11 +1,11 @@
 <?php
     
-namespace HtProfileImage\Mapper;
+namespace HtMessaging\Mapper;
 
 use ZfcBase\Mapper\AbstractDbMapper;
-use HtProfileImage\Entity\MessageInterface;
-use HtProfileImage\Entity\MessageReceiverInterface;
-use HtProfileImage\Entity\MessageReceiver;
+use HtMessaging\Entity\MessageInterface;
+use HtMessaging\Entity\MessageReceiverInterface;
+use HtMessaging\Entity\MessageReceiver;
 use Zend\Db\Sql\Expression as SqlExpression;
 use Zend\Db\Sql\Select;
 use ArrayObject;
@@ -116,7 +116,7 @@ class MessageReceiverMapper extends AbstractDbMapper
         return $this->select($select, new ArrayObject, new ObjectProperty)->current();        
     }
 
-    protected function joinWithMessage(Select $select, $columns = array('*'))
+    protected function joinWithMessage(Select $select, $columns = array('sender_id', 'subject'))
     {
         $select->join(
             $this->getMessageTableName(),

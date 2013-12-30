@@ -1,6 +1,6 @@
 <?php
     
-namespace HtMessaging;
+namespace HtMessaging\Options;
 
 interface MultipleReceiversOptionsInterface
 {

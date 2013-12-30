@@ -8,15 +8,17 @@ class Module
 
     public function onBootstrap(MvcEvent $e)
     {
+
         $sm = $e->getApplication()->getServiceManager();
-        $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractController', 'dispatch', function($e) use ($sm) {
-            $controller = $e->getTarget();
+        $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
+            //var_dump($e->getParam('route_match'));
+            $controller      = $e->getTarget();
             $controllerClass = get_class($controller);
+            //echo $controllerClass;
             $moduleNamespace = substr($controllerClass, 0, strpos($controllerClass, '\\'));
-            if ($moduleNamespace === __NAMESPACE__) {
-                if (!$sm->get('zfcuser_auth_service')->hasIdentity()) {
-                    return $controller->plugin("redirect")->toRoute($sm->get('HtMessaging\ModuleOptions')->getLoginRoute());
-                }
+            //echo ($moduleNamespace);
+            if ($moduleNamespace === __NAMESPACE__ && !$sm->get('zfcuser_auth_service')->hasIdentity()) {
+                return $controller->plugin("redirect")->toRoute($sm->get('HtMessaging\ModuleOptions')->getLoginRoute());
             }
         }); 
     }
@@ -64,6 +66,7 @@ class Module
                     $mapper->setDbAdapter($sm->get('HtMessaging\DbAdapter'));
                     $entityClass = $options->getMessageReceiverEntityClass();
                     $mapper->setEntityPrototype(new $entityClass);
+                    $mapper->setHydrator(new Mapper\MessageReceiverHydrator);
                     return $mapper;
                 },
                 'htmessaging_user_mapper' => function ($sm) {
@@ -74,12 +77,13 @@ class Module
                     $mapper->setEntityPrototype(new $entityClass);
                     $mapper->setHydrator(new \ZfcUser\Mapper\UserHydrator());
                     $mapper->setTableName($zfcuserOptions->getTableName());
+                    $mapper->setCurrentUser($sm->get('zfcuser_auth_service')->getIdentity());
                     return $mapper;
                 },
                 'HtMessaging\Service\EmailSender' => function ($sm) {
                     $emailSender = new Service\EmailSender();
                     return $emailSender;
-                }
+                },
                 'HtMessaging\Service\MessagingService' => function ($sm) {
                     $service = new Service\MessagingService();
                     $service->setServiceLocator($sm);

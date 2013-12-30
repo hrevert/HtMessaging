@@ -35,6 +35,11 @@ class MessageForm extends ProvidesEventsForm
         ));
 
         $this->add(array(
+            'name' => 'sender_id',
+            'type' => 'Hidden',
+        ));
+
+        $this->add(array(
             'name' => 'message_text',
             'type' => 'Textarea',
             'options' => array(
@@ -53,5 +58,14 @@ class MessageForm extends ProvidesEventsForm
         ));
         $this->add($receiver);
         $this->getEventManager()->trigger('init', $this);
+
+        $this->add(array(
+            'name' => 'submit',
+            'type' => 'Submit',
+            'attributes' => array(
+                'class' => 'btn btn-lg btn-primary',
+                "value" => "Send" 
+            )
+        ));
     }
 }

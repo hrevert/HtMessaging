@@ -2,7 +2,10 @@
     
 namespace HtMessaging\Controller;
 
-class MessagingController
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+
+class MessagingController extends AbstractActionController
 {
     /**
      * Number of messages per page to show in view templates
@@ -71,7 +74,7 @@ class MessagingController
                 $messages = $this->getMessageReceiverMapper()->findUnreadMessagesByReceiverId($user->getId(), true);
                 break;
             case "sent":
-                $messages = $this->getMessageMapper()->findMessagesBySenderId($user->getId(), true);
+                $messages = $this->getMessageMapper()->findBySenderId($user->getId(), true);
                 break;
             default:
                 return $this->notFoundAction();
@@ -79,6 +82,8 @@ class MessagingController
 
         $messages->setItemCountPerPage(self::NUM_OF_MSG_PER_PAGE);
         $messages->setCurrentPageNumber($this->params()->fromRoute('page', 1));
+
+        //echo $messages->getTotalItemCount();
 
         return new ViewModel(array(
             'messages' => $messages,

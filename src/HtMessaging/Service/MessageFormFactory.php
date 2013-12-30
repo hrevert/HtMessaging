@@ -53,12 +53,6 @@ class MessageFormFactory implements FactoryInterface
      */
     protected function getUserOptions()
     {
-        $options = array();
-        $users = $this->getServiceLocator()->get('htmessaging_user_mapper')->fetchAll(array('user_id', 'display_name'));
-        foreach ($users as $user) {
-            $options[$user->getId()] = $user->getDisplayName();
-        }
-
-        return $options;
+        return $this->getServiceLocator()->get('htmessaging_user_mapper')->getSelectOptions();
     }
 }

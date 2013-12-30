@@ -1,9 +1,9 @@
 <?php
     
-namespace HtProfileImage\Mapper;
+namespace HtMessaging\Mapper;
 
 use ZfcBase\Mapper\AbstractDbMapper;
-use HtProfileImage\Entity\MessageInterface;
+use HtMessaging\Entity\MessageInterface;
 use ZfcUser\Entity\UserInterface;
 use Zend\Db\Sql\Expression as SqlExpression;
 use Zend\Paginator\Adapter\DbSelect;
@@ -24,6 +24,8 @@ class MessageMapper extends AbstractDbMapper
     {
         $select = $this->getSelect();
         $select->where(array('sender_id' => $senderId));
+
+        //echo $select->getSqlString();
 
         if ($paginated) {
             return new Paginator(new DbSelect($select, $this->getDbAdapter()));
