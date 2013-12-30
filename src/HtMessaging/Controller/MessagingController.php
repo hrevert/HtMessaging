@@ -7,6 +7,9 @@ use Zend\View\Model\ViewModel;
 
 class MessagingController extends AbstractActionController
 {
+
+    const ROUTE_MESSAGING = "htmessaging";
+
     /**
      * Number of messages per page to show in view templates
      */
@@ -59,6 +62,10 @@ class MessagingController extends AbstractActionController
 
         $type = $this->params()->fromRoute('type', 'inbox');
 
+        $viewModel = new ViewModel(array(
+            'type' => $type
+        ));
+
         switch ($type)
         {
             case 'inbox':
@@ -75,6 +82,7 @@ class MessagingController extends AbstractActionController
                 break;
             case "sent":
                 $messages = $this->getMessageMapper()->findBySenderId($user->getId(), true);
+                $viewModel->setTemplate('ht-messaging/messaging/sent');
                 break;
             default:
                 return $this->notFoundAction();
@@ -85,35 +93,25 @@ class MessagingController extends AbstractActionController
 
         //echo $messages->getTotalItemCount();
 
-        return new ViewModel(array(
-            'messages' => $messages,
-            'type' => $type
-        ));
+        $viewModel->setVariable('messages', $messages);
+
+        return $viewModel;
     }
 
-    public function inboxAction()
-    {
-        
-    }
-
-    public function sentAction()
-    {
-        
-    }
-
-    public function starredAction()
-    {
-        
-    }
-
-    public function importantAction()
-    {
-        
-    }
 
     public function addReceiverAction()
     {
-        
+        $message_id = $this->params()->fromRoute('message_id', null);
+        if (!$message_id) {
+            return $this->notFoundAction();
+        }
+
+        $message = $this->getMessageMapper()->findById($message_id);
+
+        // if message is not found or the user is not sender(i.e. not allowed to view messages sent by other users)
+        if (!$message or $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity()->getId() !== $message->getSenderId()) {
+            return $this->notFoundAction();
+        }
     }
 
     public function receiversAction()
@@ -121,13 +119,77 @@ class MessagingController extends AbstractActionController
         
     }
 
-    public function deleteAction()
+    /**
+     * this methods show message body of a received message
+     */
+    public function infoAction()
     {
-        $options = $this->getModuleOptions();
+        /*$message_receiver_id = $this->params()->fromRoute('message_receiver_id', null);
 
-        if (!$options->getAllowDeleteMessage()) {
+        if (!$message_receiver_id) {
             return $this->notFoundAction();
         }
+
+        $messageReceiver = $this->getMessageReceiverMapper()->findById($message_receiver_id);
+
+        if (!$messageReceiver) {
+            return $this->notFoundAction();
+        }
+
+        $message_id = $messageReceiver->getMessageId();*/
+
+        $message_id = $this->params()->fromRoute('message_id', null);
+        if (!$message_id) {
+            return $this->notFoundAction();
+        }
+
+        $message = $this->getMessageMapper()->findById($message_id);
+
+        $receiver = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity();
+
+        $messageReceiver = $this->getMessageReceiverMapper()->findByReceiverIdAndMessageId($message_id, $receiver->getId());
+
+        if (!$messageReceiver->isReceived()) {
+            $messageReceiver->setReceived();
+            $this->getMessageReceiverMapper()->update($messageReceiver);
+        }
+
+        $sender =  $this->getServiceLocator()->get('htmessaging_user_mapper')->findById($message->getSenderId());
+
+        return new ViewModel(array(
+            'message' => $message,
+            'messageReceiver' => $messageReceiver,
+            'sender' => $sender
+        ));
+    }
+
+    /**
+     * this methods show message body of a sent message
+     */
+    public function sentInfoAction()
+    {
+        
+    }
+
+    public function deleteAction()
+    {
+        if (!$this->getModuleOptions()->getAllowDeleteMessage()) {
+            return $this->notFoundAction();
+        }
+
+        $message_receiver_id = $this->params()->fromRoute('message_receiver_id', null);
+        if (!$message_receiver_id) {
+            return $this->notFoundAction();
+        }
+
+        $messageReceiver = $this->getMessageReceiverMapper()->findById($message_receiver_id);
+        if (!$messageReceiver) {
+            return $this->notFoundAction();
+        }
+
+        $this->getMessageReceiverMapper()->delete($messageReceiver);
+
+        return $this->redirect()->toRoute(static::ROUTE_MESSAGING);
     }
 
     protected function getMessageMapper()

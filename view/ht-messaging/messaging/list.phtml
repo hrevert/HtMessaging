@@ -14,7 +14,7 @@
     </div>
 <?php endif; ?>
 <?php foreach ($messages as $message): ?>
-    <div class="well">
-    
+    <div class="well" data-message-id="<?php echo $message->id ?>" data-is-received="<?php echo $message->received_or_not ?>">
+        <?php print_r($message);  ?>
     </div>
 <?php endforeach; ?>

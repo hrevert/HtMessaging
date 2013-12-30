@@ -58,6 +58,7 @@ class Module
                     $mapper->setDbAdapter($sm->get('HtMessaging\DbAdapter'));
                     $entityClass = $options->getMessageEntityClass();
                     $mapper->setEntityPrototype(new $entityClass);
+                    $mapper->setHydrator(new Mapper\MessageHydrator);
                     return $mapper;
                 },
                 'HtMessaging\MessageReceiverMapper' => function ($sm) {

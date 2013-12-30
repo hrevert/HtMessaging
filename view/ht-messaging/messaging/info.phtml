@@ -1,0 +1,12 @@
+<?php
+$title = "Message By " . $this->zfcUserDisplayName($sender);
+$title = $this->escapeHtml($title);
+$this->headTitle($title);
+?>
+<h2><?php echo $title; ?></h2>
+<br/>
+<?php echo $this->escapeHtml($this->zfcUserDisplayName($sender))  ?>
+<br/>
+<div class="well">
+    <?php echo $this->escapeHtml($message->getMessageText()); ?>
+</div>

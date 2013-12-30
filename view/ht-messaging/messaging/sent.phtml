@@ -1,0 +1,11 @@
+<?php
+$title = "Sent Messages";
+$this->headTitle($title);
+?>
+<h2><?= $title ?></h2>
+<br/>
+<?php foreach ($messages as $message): ?>
+    <div class="well" data-message-id="<?php echo $message->id ?>">
+        <?php print_r($message);  ?>
+    </div>
+<?php endforeach; ?>

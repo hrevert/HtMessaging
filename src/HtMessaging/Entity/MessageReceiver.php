@@ -80,6 +80,11 @@ class MessageReceiver implements MessageReceiverInterface
         return $this->receivedOrNot;
     }
 
+    public function setReceived()
+    {
+        $this->setReceivedOrNot(static::RECEIVED);
+    }
+
     public function isReceived()
     {
         return $this->getReceivedOrNot() === static::RECEIVED;

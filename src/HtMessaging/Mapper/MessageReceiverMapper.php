@@ -38,7 +38,15 @@ class MessageReceiverMapper extends AbstractDbMapper
     public function getMessageTableName()
     {
         return $this->messageTableName;
-    } 
+    }
+    
+    public function findById($id)
+    {
+        $select = $this->getSelect();
+        $select->where(array('id' => $id));
+
+        return $this->select($select)->current();        
+    }    
 
     public function findByMessageId($messageId)
     {
@@ -144,4 +152,15 @@ class MessageReceiverMapper extends AbstractDbMapper
         return parent::update($entity, $where, $tableName, $hydrator);
 
     }
+
+    public function deleteById($id) 
+    {
+        return parent::delete(array('id' => $id));
+    }
+
+    public function delete((MessageReceiverInterface $messageReceiver)
+    {
+        return $this->deleteById($messageReceiver->getId());
+    }
+
 }
