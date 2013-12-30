@@ -9,7 +9,7 @@ return array(
     ),
     'service_manager' => array(
         'aliases' => array(
-            'HtMessaging\DbAdapter' => 'Zend\Db\Adapter\Adapter'
+            'HtMessaging\DbAdapter' => 'zfcuser_zend_db_adapter'
         )
     ),
     'controller' => array(

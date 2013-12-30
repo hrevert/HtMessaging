@@ -12,11 +12,11 @@ class MessageReceiver implements MessageReceiverInterface
 
     protected $sentDateTime;
 
-    protected $starredOrNot;
+    protected $starredOrNot = 0;
 
-    protected $receivedOrNot;
+    protected $receivedOrNot = 0;
 
-    protected $importantOrNot;
+    protected $importantOrNot = 0;
 
     const STARRED = 1;
 

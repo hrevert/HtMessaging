@@ -66,6 +66,25 @@ class Module
                     $mapper->setEntityPrototype(new $entityClass);
                     return $mapper;
                 },
+                'htmessaging_user_mapper' => function ($sm) {
+                    $zfcuserOptions = $sm->get('zfcuser_module_options');
+                    $mapper = new Mapper\UserMapper();
+                    $mapper->setDbAdapter($sm->get('HtMessaging\DbAdapter'));
+                    $entityClass = $zfcuserOptions->getUserEntityClass();
+                    $mapper->setEntityPrototype(new $entityClass);
+                    $mapper->setHydrator(new \ZfcUser\Mapper\UserHydrator());
+                    $mapper->setTableName($zfcuserOptions->getTableName());
+                    return $mapper;
+                },
+                'HtMessaging\Service\EmailSender' => function ($sm) {
+                    $emailSender = new Service\EmailSender();
+                    return $emailSender;
+                }
+                'HtMessaging\Service\MessagingService' => function ($sm) {
+                    $service = new Service\MessagingService();
+                    $service->setServiceLocator($sm);
+                    return $service;
+                }
             )
         );
     }

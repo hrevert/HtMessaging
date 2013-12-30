@@ -4,7 +4,9 @@ namespace HtMessaging\Controller;
 
 class MessagingController
 {
-
+    /**
+     * Number of messages per page to show in view templates
+     */
     const NUM_OF_MSG_PER_PAGE = 20;
 
     /**
@@ -22,6 +24,11 @@ class MessagingController
      */
     protected $moduleOptions;
 
+    /**
+     *@var HtMessaging\Service\MessagingService
+     */
+    protected $messagingService;
+
 
     public function composeAction()
     {
@@ -31,7 +38,10 @@ class MessagingController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            
+            $postData = $request->getPost()->toArray();
+            if ($this->getMessagingService()->createMessage($postData)) {
+                $messageSent = true;
+            }
         }
 
         return array(
@@ -133,6 +143,11 @@ class MessagingController
         return $this->messageReceiverMapper;         
     }
 
+    /**
+     * gets module options from ServiceManager
+     *
+     * @return \HtMessaging\Options\ModuleOptions
+     */
     protected function getModuleOptions()
     {
         if (!$this->moduleOptions) {
@@ -140,5 +155,20 @@ class MessagingController
         }
 
         return $this->moduleOptions;
+    }
+
+
+    /**
+     * gets Messaging Service
+     *
+     * @return HtMessaging\Service\MessagingService
+     */
+    protected function getMessagingService()
+    {
+        if (!$this->messagingService) {
+            $this->messagingService = $this->getServiceLocator()->get('HtMessaging\Service\MessagingService');
+        }
+
+        return $this->messagingService;
     }
 }
