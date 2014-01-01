@@ -115,13 +115,15 @@ class MessageReceiverMapper extends AbstractDbMapper
     }
 
 
-    public function findByReceiverIdAndMessageId($messageId, $receiverId)
+    public function findByReceiverIdAndMessageId($messageId, $receiverId, $joinWithMessage = false)
     {
         $select = $this->getSelect();
         $select->where(array('receiver_id' => $receiverId, 'message_id' => $messageId));
-        $this->joinWithMessage($select);
-
-        return $this->select($select, new ArrayObject, new ObjectProperty)->current();        
+        if ($joinWithMessage) {
+            $this->joinWithMessage($select);
+            return $this->select($select, new ArrayObject, new ObjectProperty)->current();              
+        }
+         return $this->select($select)->current();      
     }
 
     protected function joinWithMessage(Select $select, $columns = array('sender_id', 'subject'))
@@ -149,7 +151,7 @@ class MessageReceiverMapper extends AbstractDbMapper
             $where = array('id' => $messageReceiver->getId());
         }
 
-        return parent::update($entity, $where, $tableName, $hydrator);
+        return parent::update($messageReceiver, $where, $tableName, $hydrator);
 
     }
 
@@ -158,7 +160,7 @@ class MessageReceiverMapper extends AbstractDbMapper
         return parent::delete(array('id' => $id));
     }
 
-    public function delete((MessageReceiverInterface $messageReceiver)
+    public function delete(MessageReceiverInterface $messageReceiver)
     {
         return $this->deleteById($messageReceiver->getId());
     }

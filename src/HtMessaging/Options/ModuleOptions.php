@@ -12,7 +12,7 @@ class ModuleOptions extends AbstractOptions implements
 
     protected $sendEmailMessage = false;
 
-    protected $enableMultipleReceivers = false; 
+    protected $enableMultipleReceivers = true; 
 
     protected $messageEntityClass = "HtMessaging\Entity\Message";
 

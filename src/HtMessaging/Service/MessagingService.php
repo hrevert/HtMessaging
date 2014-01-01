@@ -41,9 +41,9 @@ class MessagingService extends EventProvider implements ServiceLocatorAwareInter
 
         $message = $form->getData();
 
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('message' => $message, 'form' => $form));
+        $this->getEventManager()->trigger(__FUNCTION__, $message, array('message' => $message, 'form' => $form));
         $this->getMessageMapper()->insert($message);
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('message' => $message, 'form' => $form));
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $message, array('message' => $message, 'form' => $form));
         
         $this->addReceipents($message, $receivers);
     
@@ -75,9 +75,9 @@ class MessagingService extends EventProvider implements ServiceLocatorAwareInter
         $messageReceiver = new $messageReceiverEntityClass;
         $messageReceiver->setMessageId($message->getId());
         $messageReceiver->setReceiverId($receiver->getId());
-        $this->getEventManager()->trigger(__FUNCTION__, $this, array('messageReceiver' => $messageReceiver, 'message' => $message, 'receiver' => $receiver));
+        $this->getEventManager()->trigger(__FUNCTION__, $message, array('messageReceiver' => $messageReceiver, 'message' => $message, 'receiver' => $receiver));
         $this->getMessageReceiverMapper()->insert($messageReceiver);
-        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $this, array('messageReceiver' => $messageReceiver, 'message' => $message, 'receiver' => $receiver));
+        $this->getEventManager()->trigger(__FUNCTION__ . '.post', $message, array('messageReceiver' => $messageReceiver, 'message' => $message, 'receiver' => $receiver));
     }
 
 

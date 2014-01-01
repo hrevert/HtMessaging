@@ -35,6 +35,11 @@ class MessagingController extends AbstractActionController
      */
     protected $messagingService;
 
+    /**
+     * @var HtMessaging\Mapper\UserMapper
+     */
+    protected $userMapper;
+
 
     public function composeAction()
     {
@@ -139,11 +144,17 @@ class MessagingController extends AbstractActionController
         $message_id = $messageReceiver->getMessageId();*/
 
         $message_id = $this->params()->fromRoute('message_id', null);
+
+        //var_dump($message_id);
         if (!$message_id) {
             return $this->notFoundAction();
         }
 
         $message = $this->getMessageMapper()->findById($message_id);
+
+        if (!$message) {
+            return $this->notFoundAction();
+        }
 
         $receiver = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity();
 
@@ -168,7 +179,33 @@ class MessagingController extends AbstractActionController
      */
     public function sentInfoAction()
     {
+        $message_id = $this->params()->fromRoute('message_id', null);
+        if (!$message_id) {
+            return $this->notFoundAction();
+        }
+
+        $message = $this->getMessageMapper()->findById($message_id);
+
+        if (!$message) {
+            return $this->notFoundAction();
+        }
         
+        
+        $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
+
+        if (count($messageReceivers) === 1) {
+            $receiver = $this->getUserMapper()->findById($messageReceivers->current()->getReceiverId());
+            return new ViewModel(array(
+                'message' => $message,
+                'messageReceivers' => $messageReceivers,
+                'receiver' => $receiver
+            )); 
+        }
+        
+        return new ViewModel(array(
+            'message' => $message,
+            'messageReceivers' => $messageReceivers
+        ));        
     }
 
     public function deleteAction()
@@ -177,12 +214,12 @@ class MessagingController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        $message_receiver_id = $this->params()->fromRoute('message_receiver_id', null);
-        if (!$message_receiver_id) {
+        $id = $this->params()->fromRoute('id', null);
+        if (!$id) {
             return $this->notFoundAction();
         }
 
-        $messageReceiver = $this->getMessageReceiverMapper()->findById($message_receiver_id);
+        $messageReceiver = $this->getMessageReceiverMapper()->findById($id);
         if (!$messageReceiver) {
             return $this->notFoundAction();
         }
@@ -237,5 +274,19 @@ class MessagingController extends AbstractActionController
         }
 
         return $this->messagingService;
+    }
+
+    /**
+     * gets User Mapper
+     *
+     * @return HtMessaging\Mapper\UserMapper
+     */
+    protected function getUserMapper()
+    {
+        if (!$this->userMapper) {
+            $this->userMapper = $this->getServiceLocator()->get('zfcuser_user_mapper');
+        }
+
+        return $this->userMapper;
     }
 }

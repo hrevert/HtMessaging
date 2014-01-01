@@ -34,7 +34,7 @@ return array(
                     'list' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/[:type[/]]',
+                            'route' => '/[:type[/]][page/:page[/]]',
                         )
                     ),
                     'compose' => array(
@@ -42,11 +42,56 @@ return array(
                         'options' => array(
                             'route' => '/compose',
                             'defaults' => array(
-                                'controller' => 'htmessaging',
                                 'action' => 'compose'
                             )
                         )                        
-                    )
+                    ),
+                    'info' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/info/:message_id',
+                            'defaults' => array(
+                                'action' => 'info'
+                            )
+                        )                        
+                    ),
+                    'sent_info' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/sent-info/:message_id[/]',
+                            'defaults' => array(
+                                'controller' => 'htmessaging',
+                                'action' => 'sent-info'
+                            )
+                        )                        
+                    ),
+                    'add-receiver' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/add-receiver:message_id[/]',
+                            'defaults' => array(
+                                'action' => 'add-receiver'
+                            )
+                        )                    
+                    ),
+                    'receivers' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/receivers:message_id[/]',
+                            'defaults' => array(
+                                'action' => 'receivers'
+                            )
+                        )                    
+                    ),
+                    'delete' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/delete:id[/]',
+                            'defaults' => array(
+                                'action' => 'delete'
+                            )
+                        )                    
+                    ),
                 )
             )
         )

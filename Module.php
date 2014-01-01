@@ -93,4 +93,17 @@ class Module
             )
         );
     }
+
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'htMessagingOptions' => function ($sm) {
+                    $helper = new View\Helper\ModuleOptions();
+                    $helper->setOptions($sm->getServiceLocator()->get('HtMessaging\ModuleOptions'));
+                    return $helper;
+                }
+            )
+        );
+    }
 }
