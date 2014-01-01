@@ -34,7 +34,11 @@ return array(
                     'list' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/[:type[/]][page/:page[/]]',
+                            'route' => '/:type[/][page/:page[/]]',
+                        ),
+                        'defaults' => array(
+                            'type' => 'inbox',
+                            'page' => 1
                         )
                     ),
                     'compose' => array(

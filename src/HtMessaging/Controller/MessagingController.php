@@ -93,7 +93,7 @@ class MessagingController extends AbstractActionController
                 return $this->notFoundAction();
         }
 
-        $messages->setItemCountPerPage(self::NUM_OF_MSG_PER_PAGE);
+        $messages->setItemCountPerPage(static::NUM_OF_MSG_PER_PAGE);
         $messages->setCurrentPageNumber($this->params()->fromRoute('page', 1));
 
         //echo $messages->getTotalItemCount();
@@ -129,22 +129,8 @@ class MessagingController extends AbstractActionController
      */
     public function infoAction()
     {
-        /*$message_receiver_id = $this->params()->fromRoute('message_receiver_id', null);
-
-        if (!$message_receiver_id) {
-            return $this->notFoundAction();
-        }
-
-        $messageReceiver = $this->getMessageReceiverMapper()->findById($message_receiver_id);
-
-        if (!$messageReceiver) {
-            return $this->notFoundAction();
-        }
-
-        $message_id = $messageReceiver->getMessageId();*/
 
         $message_id = $this->params()->fromRoute('message_id', null);
-        //var_dump($message_id);
         if (!$message_id) {
             return $this->notFoundAction();
         }
@@ -153,6 +139,7 @@ class MessagingController extends AbstractActionController
         if (!$message) {
             return $this->notFoundAction();
         }
+
         $receiver = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity();
 
         $messageReceiver = $this->getMessageReceiverMapper()->findByReceiverIdAndMessageId($message_id, $receiver->getId());
@@ -190,19 +177,17 @@ class MessagingController extends AbstractActionController
         
         $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
 
-        if (count($messageReceivers) === 1) {
-            $receiver = $this->getUserMapper()->findById($messageReceivers->current()->getReceiverId());
-            return new ViewModel(array(
-                'message' => $message,
-                'messageReceivers' => $messageReceivers,
-                'receiver' => $receiver
-            )); 
-        }
-        
-        return new ViewModel(array(
+        $vm = new ViewModel(array(
             'message' => $message,
             'messageReceivers' => $messageReceivers
-        ));        
+        ));
+
+        if (count($messageReceivers) === 1) {
+            $receiver = $this->getUserMapper()->findById($messageReceivers->current()->getReceiverId());
+            $vm->setVariable('receiver', $receiver); 
+        }
+        
+        return $vm;         
     }
 
     public function deleteAction()
