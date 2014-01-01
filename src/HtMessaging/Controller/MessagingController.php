@@ -144,18 +144,15 @@ class MessagingController extends AbstractActionController
         $message_id = $messageReceiver->getMessageId();*/
 
         $message_id = $this->params()->fromRoute('message_id', null);
-
         //var_dump($message_id);
         if (!$message_id) {
             return $this->notFoundAction();
         }
-
         $message = $this->getMessageMapper()->findById($message_id);
 
         if (!$message) {
             return $this->notFoundAction();
         }
-
         $receiver = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity();
 
         $messageReceiver = $this->getMessageReceiverMapper()->findByReceiverIdAndMessageId($message_id, $receiver->getId());

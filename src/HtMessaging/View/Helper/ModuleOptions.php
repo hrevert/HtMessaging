@@ -27,9 +27,4 @@ class ModuleOptions extends AbstractHelper
     {
         return $this->getOptions()->getEnableMultipleReceivers();
     }
-
-    public function getDisplayUserImage()
-    {
-        return $this->getOptions()->getDisplayUserImage();
-    }
 }

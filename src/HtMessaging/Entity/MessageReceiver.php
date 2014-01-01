@@ -12,11 +12,11 @@ class MessageReceiver implements MessageReceiverInterface
 
     protected $sentDateTime;
 
-    protected $starredOrNot = 0;
+    protected $starredOrNot = self::NOT_STARRED;
 
-    protected $receivedOrNot = 0;
+    protected $receivedOrNot = self::NOT_RECEIVED;
 
-    protected $importantOrNot = 0;
+    protected $importantOrNot = self::NOT_IMPORTANT;
 
     const STARRED = 1;
 

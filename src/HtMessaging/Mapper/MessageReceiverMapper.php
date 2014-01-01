@@ -104,9 +104,8 @@ class MessageReceiverMapper extends AbstractDbMapper
     public function findUnreadMessagesByReceiverId($receiverId, $paginated = false)
     {
         $select = $this->getSelect();
-        $select->where(array('receiver_id' => $receiverId, 'received_or_not' => MessageReceiver::RECEIVED));
+        $select->where(array('receiver_id' => $receiverId, 'received_or_not' => MessageReceiver::NOT_RECEIVED));
         $this->joinWithMessage($select);
-
         if ($paginated) {
             return new Paginator(new DbSelect($select, $this->getDbAdapter()));
         }

@@ -14,9 +14,9 @@ class Message implements MessageInterface
 
     protected $createdDateTime;
 
-    protected $starredOrNot = 0;
+    protected $starredOrNot = self::NOT_STARRED;
 
-    protected $importantOrNot = 0;
+    protected $importantOrNot = self::NOT_IMPORTANT;
 
     const STARRED = 1;
 

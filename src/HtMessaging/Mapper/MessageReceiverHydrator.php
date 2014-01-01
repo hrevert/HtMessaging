@@ -18,7 +18,7 @@ class MessageReceiverHydrator extends ClassMethods
     public function extract($object)
     {
         if (!$object instanceof MessageReceiverInterface) {
-            throw new \InvalidArgumentException('$object must be an instance of HtMessaging\Entity\MessageReceiverInterface');
+            throw new \InvalidArgumentException('$object must be an instance of class implementing HtMessaging\Entity\MessageReceiverInterface');
         }
         $data = parent::extract($object);
         unset($data['is_received']);

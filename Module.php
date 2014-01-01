@@ -102,6 +102,13 @@ class Module
                     $helper = new View\Helper\ModuleOptions();
                     $helper->setOptions($sm->getServiceLocator()->get('HtMessaging\ModuleOptions'));
                     return $helper;
+                },
+                'htmessagingComparer' => function($sm) {
+                    $helper = new View\Helper\Comparer();
+                    return $helper;
+                },
+                'htSmartTime' => function($sm) {
+                    return new View\Helper\SmartTime;
                 }
             )
         );
