@@ -4,6 +4,9 @@ namespace HtMessaging\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
+use HtMessaging\Entity\Message;
+use HtMessaging\Entity\MessageReceiver;
 
 class MessagingController extends AbstractActionController
 {
@@ -96,8 +99,6 @@ class MessagingController extends AbstractActionController
         $messages->setItemCountPerPage(static::NUM_OF_MSG_PER_PAGE);
         $messages->setCurrentPageNumber($this->params()->fromRoute('page', 1));
 
-        //echo $messages->getTotalItemCount();
-
         $viewModel->setVariable('messages', $messages);
 
         return $viewModel;
@@ -114,14 +115,24 @@ class MessagingController extends AbstractActionController
         $message = $this->getMessageMapper()->findById($message_id);
 
         // if message is not found or the user is not sender(i.e. not allowed to view messages sent by other users)
-        if (!$message or $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity()->getId() !== $message->getSenderId()) {
+        if (!$message or !$this->isValidSender($message)) {
             return $this->notFoundAction();
         }
     }
 
     public function receiversAction()
     {
-        
+        $message_id = $this->params()->fromRoute('message_id', null);
+        if (!$message_id) {
+            return $this->notFoundAction();
+        }
+
+        $message = $this->getMessageMapper()->findById($message_id);
+
+        // if message is not found or the user is not sender(i.e. not allowed to view messages sent by other users)
+        if (!$message or !$this->getMessagingService()->isValidSender($message)) {
+            return $this->notFoundAction();
+        }        
     }
 
     /**
@@ -138,7 +149,7 @@ class MessagingController extends AbstractActionController
 
         if (!$message) {
             return $this->notFoundAction();
-        }
+        }  
 
         $receiver = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity();
 
@@ -170,9 +181,10 @@ class MessagingController extends AbstractActionController
 
         $message = $this->getMessageMapper()->findById($message_id);
 
-        if (!$message) {
+        // if message is not found or the user is not sender(i.e. not allowed to view messages sent by other users)
+        if (!$message or !$this->getMessagingService()->isValidSender($message)) {
             return $this->notFoundAction();
-        }
+        } 
         
         
         $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
@@ -190,7 +202,8 @@ class MessagingController extends AbstractActionController
         return $vm;         
     }
 
-    public function deleteAction()
+    /**
+    public function deleteReceiverAction()
     {
         if (!$this->getModuleOptions()->getAllowDeleteMessage()) {
             return $this->notFoundAction();
@@ -210,7 +223,92 @@ class MessagingController extends AbstractActionController
 
         return $this->redirect()->toRoute(static::ROUTE_MESSAGING);
     }
+    */
 
+    public function messageEditAction()
+    {
+        $type = $this->params()->fromRoute('type', null);
+        $id = $this->params()->fromRoute('id', null);
+        if (!$type || $id) {
+            return $this->notFoundAction();
+        }
+        
+        $message = $this->getMessageMapper()->findById($id); 
+        if (!$message) {
+            return $this->notFoundAction();
+        }
+
+        switch(strtolower($type))
+        {
+            case "star":
+                if ($message->isStarred()) {
+                    $message->setStarred();
+                } else {
+                    $message->setUnstarred();
+                }
+                break;
+            case "important":
+                if ($message->isImportant()) {
+                    $message->setImportant();
+                } else {
+                    $message->setUnimportant();
+                }
+                break;
+            default:
+                return $this->notFoundAction();
+        }
+        $this->getMessageMapper()->update($message);
+
+        return new JsonModel(array(
+            'changed' => true
+        ));
+    }
+
+    public function messageReceiverEditAction()
+    {
+        $type = $this->params()->fromRoute('type', null);
+        $id = $this->params()->fromRoute('id', null);
+        if (!$type || $id) {
+            return $this->notFoundAction();
+        }
+        
+        $messageReceiver = $this->getMessageReceiverMapper()->findById($id); 
+        if (!$messageReceiver) {
+            return $this->notFoundAction();
+        }
+
+        switch(strtolower($type))
+        {
+            case "star":
+                if ($messageReceiver->isStarred()) {
+                    $messageReceiver->setStarred();
+                } else {
+                    $messageReceiver->setUnstarred();
+                }
+                
+                break;
+            case "important":
+                if ($messageReceiver->isImportant()) {
+                    $messageReceiver->setImportant();
+                } else {
+                    $messageReceiver->setUnimportant();
+                }
+                break;
+            default:
+                return $this->notFoundAction();
+        }
+        $this->getMessageReceiverMapper()->update($messageReceiver);
+
+        return new JsonModel(array(
+            'changed' => true
+        ));        
+    }
+
+    /**
+     * gets MessageMapper
+     *
+     * @return \HtMessaging\Options\ModuleOptions
+     */
     protected function getMessageMapper()
     {
         if (!$this->messageMapper) {

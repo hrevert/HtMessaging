@@ -3,6 +3,10 @@ namespace HtMessaging\Entity;
 
 interface MessageReceiverInterface
 {
+    const RECEIVED = 1;
+
+    const NOT_RECEIVED = 0;
+
     public function setId($id);
 
     public function getId();

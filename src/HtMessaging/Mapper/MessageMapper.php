@@ -8,8 +8,9 @@ use ZfcUser\Entity\UserInterface;
 use Zend\Db\Sql\Expression as SqlExpression;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class MessageMapper extends AbstractDbMapper
+class MessageMapper extends AbstractDbMapper implements MessageMapperInteface
 {
     protected $tableName = "message";
 
@@ -43,6 +44,16 @@ class MessageMapper extends AbstractDbMapper
         $result = parent::insert($message);
         $message->setId($result->getGeneratedValue());
         return $result;
+    }
+
+    public function update(MessageInterface $message, $where = null, $tableName = null, HydratorInterface $hydrator = null)
+    {
+        if (!$where) {
+            $where = array('id' => $message->getId());
+        }
+
+        return parent::update($message, $where, $tableName, $hydrator);
+
     }
 
     public function getTableName()

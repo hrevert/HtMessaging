@@ -14,7 +14,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 
-class MessageReceiverMapper extends AbstractDbMapper
+class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverMapperInterface
 {
     protected $tableName = "message_receiver";
 

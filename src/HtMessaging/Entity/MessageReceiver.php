@@ -2,9 +2,8 @@
 
 namespace HtMessaging\Entity;
 
-class MessageReceiver implements MessageReceiverInterface
+class MessageReceiver extends AbstractMessageEntity implements MessageReceiverInterface
 {
-    protected $id;
 
     protected $messageId;
 
@@ -12,33 +11,7 @@ class MessageReceiver implements MessageReceiverInterface
 
     protected $sentDateTime;
 
-    protected $starredOrNot = self::NOT_STARRED;
-
     protected $receivedOrNot = self::NOT_RECEIVED;
-
-    protected $importantOrNot = self::NOT_IMPORTANT;
-
-    const STARRED = 1;
-
-    const NOT_STARRED = 0;
-
-    const RECEIVED = 1;
-
-    const NOT_RECEIVED = 0;
-
-    const IMPORTANT = 1;
-
-    const NOT_IMPORTANT = 1;
-
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
 
     public function setMessageId($messageId)
     {
@@ -90,33 +63,4 @@ class MessageReceiver implements MessageReceiverInterface
         return $this->getReceivedOrNot() === static::RECEIVED;
     }
 
-    public function setStarredOrNot($starredOrNot)
-    {
-        $this->starredOrNot = $starredOrNot;
-    }
-
-    public function getStarredOrNot()
-    {
-        return $this->starredOrNot;
-    }
-
-    public function isStarred()
-    {
-        return $this->getStarredOrNot() === static::STARRED;
-    }
-
-    public function setImportantOrNot($importantOrNot)
-    {
-        $this->importantOrNot = $importantOrNot;
-    }
-
-    public function getImportantOrNot()
-    {
-        return $this->importantOrNot;
-    }
-
-    public function isImportant()
-    {
-        return $this->getImportantOrNot() === static::IMPORTANT;
-    }
 }
