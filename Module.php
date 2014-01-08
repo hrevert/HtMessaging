@@ -10,17 +10,14 @@ class Module
     {
 
         $sm = $e->getApplication()->getServiceManager();
-        $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
-            //var_dump($e->getParam('route_match'));
+        $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractController', MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
             $controller      = $e->getTarget();
             $controllerClass = get_class($controller);
-            //echo $controllerClass;
             $moduleNamespace = substr($controllerClass, 0, strpos($controllerClass, '\\'));
-            //echo ($moduleNamespace);
             if ($moduleNamespace === __NAMESPACE__ && !$sm->get('zfcuser_auth_service')->hasIdentity()) {
                 return $controller->plugin("redirect")->toRoute($sm->get('HtMessaging\ModuleOptions')->getLoginRoute());
             }
-        }); 
+        }, 100); 
     }
 
     public function getConfig()

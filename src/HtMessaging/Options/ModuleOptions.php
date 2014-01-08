@@ -18,7 +18,7 @@ class ModuleOptions extends AbstractOptions implements
 
     protected $messageReceiverEntityClass = "HtMessaging\Entity\MessageReceiver";
 
-    protected $loginRoute = "zfcuser\login";
+    protected $loginRoute = "zfcuser/login";
 
     protected $allowDeleteMessage = true;
 
@@ -77,7 +77,7 @@ class ModuleOptions extends AbstractOptions implements
         $this->loginRoute = $loginRoute;
     }
 
-    public function getLoginRoute($loginRoute)
+    public function getLoginRoute()
     {
         return $this->loginRoute;
     }
