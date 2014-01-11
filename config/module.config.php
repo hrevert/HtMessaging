@@ -72,7 +72,7 @@ return array(
                     'add-receiver' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/add-receiver:message_id[/]',
+                            'route' => '/add-receiver/:message_id[/]',
                             'defaults' => array(
                                 'action' => 'add-receiver'
                             )
@@ -81,7 +81,7 @@ return array(
                     'receivers' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/receivers:message_id[/]',
+                            'route' => '/receivers/:message_id[/]',
                             'defaults' => array(
                                 'action' => 'receivers'
                             )

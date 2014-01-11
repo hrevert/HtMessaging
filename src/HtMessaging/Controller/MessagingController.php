@@ -132,7 +132,20 @@ class MessagingController extends AbstractActionController
         // if message is not found or the user is not sender(i.e. not allowed to view messages sent by other users)
         if (!$message or !$this->getMessagingService()->isValidSender($message)) {
             return $this->notFoundAction();
-        }        
+        }
+        
+        $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
+
+        $messageReceivers = iterator_to_array($messageReceivers);
+
+        $receivers = $this->getMessagingService()->getReceivers($message, $messageReceivers);
+
+        return array(
+            'message' => $message,
+            'messageReceivers' => $messageReceivers,
+            'receivers' => $receivers
+        );
+            
     }
 
     /**

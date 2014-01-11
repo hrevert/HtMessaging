@@ -21,11 +21,10 @@
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "2.*",
-        "zf-commons/zfc-user": "0.1.*",
-        "zf-commons/zfc-base": "0.1.*"
+        "zf-commons/zfc-user": "0.1.*"
     },
     "suggest": {
-        "hrevert/ht-profile-image": "To display images of user in messages",
+        "rwoverdijk/assetmanager": "To use assets(js, css) provided by this module",
     },
     "autoload": {
         "psr-0": {

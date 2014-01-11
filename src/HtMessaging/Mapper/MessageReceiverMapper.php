@@ -52,7 +52,6 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
     {
         $select = $this->getSelect();
         $select->where(array('message_id' => $messageId));
-
         return $this->select($select);        
     }
 

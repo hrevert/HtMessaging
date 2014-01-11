@@ -19,6 +19,8 @@ class MessagingService extends EventProvider implements ServiceLocatorAwareInter
 
     protected $messageReceiverMapper;
 
+    protected $userMapper;
+
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
     public function createMessage(array $postData)
@@ -91,6 +93,24 @@ class MessagingService extends EventProvider implements ServiceLocatorAwareInter
         $this->getEventManager()->trigger(__FUNCTION__ . '.post', $message, array('messageReceiver' => $messageReceiver, 'message' => $message, 'receiver' => $receiver));
     }
 
+    public function getReceivers(MessageInterface $message, $messageReceivers = null)
+    {
+        if (!$messageReceivers) {
+            $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
+        }
+        
+        $userIdList = array();
+        
+        foreach ($messageReceivers as $messageReceiver) {
+            $userIdList[] = $messageReceiver->getReceiverId();
+        }
+
+        return $this->getUserMapper()->fetchAll(null, function(Select $select) use ($userIdList) {
+            $select->where(array('user_id' => $userIdList));
+        });
+            
+    }
+
     /**
      * checks if a message sender is the currently loggged in user
      * useful to check if a user is trying to access messages sent by other messages
@@ -139,5 +159,19 @@ class MessagingService extends EventProvider implements ServiceLocatorAwareInter
         }
         
         return $this->messageReceiverMapper;         
+    }
+
+    /**
+     * gets User Mapper
+     *
+     * @return HtMessaging\Mapper\UserMapper
+     */
+    protected function getUserMapper()
+    {
+        if (!$this->userMapper) {
+            $this->userMapper = $this->getServiceLocator()->get('htmessaging_user_mapper');
+        }
+
+        return $this->userMapper;
     }
 }
