@@ -1,6 +1,6 @@
 <?php
 
-namespace HtMessaging\Service;
+namespace HtMessaging\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

@@ -1,6 +1,8 @@
 <?php
 namespace HtMessaging\Entity;
 
+use DateTime;
+
 interface MessageInterface
 {
     public function setId($id);
@@ -19,7 +21,7 @@ interface MessageInterface
 
     public function getMessageText();
 
-    public function setCreatedDateTime($createdDateTime);
+    public function setCreatedDateTime(DateTime $createdDateTime);
 
     public function getCreatedDateTime();
 }

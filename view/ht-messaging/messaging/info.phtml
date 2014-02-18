@@ -9,10 +9,7 @@ $this->headTitle($title);
 <div class="alert alert-info">
     <span><b>Sender</b> : <?php echo $this->zfcUserDisplayName($sender); ?></span>
     <span class="pull-right">
-        <?php
-            $dateObject = new \DateTime($messageReceiver->getSentDateTime());
-            echo $dateObject->format('l, jS F Y  h:i A');
-        ?>
+        <?php echo $messageReceiver->getSentDateTime()->format('l, jS F Y  h:i A'); ?>
     </span>
 </div>
 <br/>

@@ -12,10 +12,7 @@ $this->headTitle($title);
         <span><a href="<?php echo $this->url('htmessaging/receivers', array('message_id' => $message->getId())); ?>">View Receivers</a></span>
     <?php endif; ?>
     <span class="pull-right">
-        <?php
-            $dateObject = new \DateTime($message->getCreatedDateTime());
-            echo $dateObject->format('l, jS F Y  h:i A');
-        ?>
+        <?php echo $message->getCreatedDateTime()->format('l, jS F Y  h:i A'); ?>
     </span>
 </div>
 <div class="well">

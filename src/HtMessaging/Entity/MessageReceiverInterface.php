@@ -1,6 +1,8 @@
 <?php
 namespace HtMessaging\Entity;
 
+use DateTime;
+
 interface MessageReceiverInterface
 {
     const RECEIVED = 1;
@@ -19,7 +21,7 @@ interface MessageReceiverInterface
 
     public function getReceiverId();
 
-    public function setSentDateTime($sentDateTime);
+    public function setSentDateTime(DateTime $sentDateTime);
 
     public function getSentDateTime();
 

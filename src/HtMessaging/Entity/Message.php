@@ -2,6 +2,8 @@
     
 namespace HtMessaging\Entity;
 
+use DateTime;
+
 class Message extends AbstractMessageEntity implements MessageInterface
 {
 
@@ -43,7 +45,7 @@ class Message extends AbstractMessageEntity implements MessageInterface
         return $this->messageText;
     }
 
-    public function setCreatedDateTime($createdDateTime)
+    public function setCreatedDateTime(DateTime $createdDateTime)
     {
         $this->createdDateTime = $createdDateTime;
     }

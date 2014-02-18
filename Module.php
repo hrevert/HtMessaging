@@ -43,50 +43,15 @@ class Module
     {
         return array(
             'factories' => array(
-                'HtMessaging\ModuleOptions' => function ($sm) {
-                    $config = $sm->get('config');
-                    $moduleConfig = isset($config['htmessaging']) ? $config['htmessaging'] : array();
-                    return new Options\ModuleOptions($moduleConfig);
-                },
+                'HtMessaging\ModuleOptions' => 'HtMessaging\Factory\ModuleOptionsFactory',
                 'HtMessaging\MessageForm' => 'HtMessaging\Service\MessageFormFactory',
-                'HtMessaging\MessageMapper' => function ($sm) {
-                    $options = $sm->get('HtMessaging\ModuleOptions');
-                    $mapper = new Mapper\MessageMapper();
-                    $mapper->setDbAdapter($sm->get('HtMessaging\DbAdapter'));
-                    $entityClass = $options->getMessageEntityClass();
-                    $mapper->setEntityPrototype(new $entityClass);
-                    $mapper->setHydrator(new Mapper\MessageHydrator);
-                    return $mapper;
-                },
-                'HtMessaging\MessageReceiverMapper' => function ($sm) {
-                    $options = $sm->get('HtMessaging\ModuleOptions');
-                    $mapper = new Mapper\MessageReceiverMapper();
-                    $mapper->setDbAdapter($sm->get('HtMessaging\DbAdapter'));
-                    $entityClass = $options->getMessageReceiverEntityClass();
-                    $mapper->setEntityPrototype(new $entityClass);
-                    $mapper->setHydrator(new Mapper\MessageReceiverHydrator);
-                    return $mapper;
-                },
-                'htmessaging_user_mapper' => function ($sm) {
-                    $zfcuserOptions = $sm->get('zfcuser_module_options');
-                    $mapper = new Mapper\UserMapper();
-                    $mapper->setDbAdapter($sm->get('HtMessaging\DbAdapter'));
-                    $entityClass = $zfcuserOptions->getUserEntityClass();
-                    $mapper->setEntityPrototype(new $entityClass);
-                    $mapper->setHydrator(new \ZfcUser\Mapper\UserHydrator());
-                    $mapper->setTableName($zfcuserOptions->getTableName());
-                    $mapper->setCurrentUser($sm->get('zfcuser_auth_service')->getIdentity());
-                    return $mapper;
-                },
-                'HtMessaging\Service\EmailSender' => function ($sm) {
-                    $emailSender = new Service\EmailSender();
-                    return $emailSender;
-                },
-                'HtMessaging\Service\MessagingService' => function ($sm) {
-                    $service = new Service\MessagingService();
-                    $service->setServiceLocator($sm);
-                    return $service;
-                }
+                'HtMessaging\MessageMapper' => 'HtMessaging\Factory\MessageMapperFactory',
+                'HtMessaging\MessageReceiverMapper' => 'HtMessaging\Factory\MessageReceiverMapperFactory',
+                'htmessaging_user_mapper' => 'HtMessaging\Factory\UserMapperFactory',
+                'HtMessaging\Service\MessagingService' => 'HtMessaging\Factory\MessagingServiceFactory',
+            ),
+            'invokables' => array(
+                'HtMessaging\Service\EmailSender' => 'HtMessaging\Service\EmailSender',
             )
         );
     }
@@ -94,19 +59,9 @@ class Module
     public function getViewHelperConfig()
     {
         return array(
-            'factories' => array(
-                'htMessagingOptions' => function ($sm) {
-                    $helper = new View\Helper\ModuleOptions();
-                    $helper->setOptions($sm->getServiceLocator()->get('HtMessaging\ModuleOptions'));
-                    return $helper;
-                },
-                'htmessagingComparer' => function($sm) {
-                    $helper = new View\Helper\Comparer();
-                    return $helper;
-                },
-                'htSmartTime' => function($sm) {
-                    return new View\Helper\SmartTime;
-                }
+            'invokables' => array(
+                'htSmartTime' => 'HtMessaging\View\Helper\SmartTime',
+                'htmessagingComparer' => 'HtMessaging\View\Helper\Comparer',
             )
         );
     }

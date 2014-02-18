@@ -8,8 +8,6 @@ class ModuleOptions extends AbstractOptions implements
     EntityOptionsInterface,
     MultipleReceiversOptionsInterface
 {
-    protected $displayUserImage = false;
-
     protected $sendEmailMessage = false;
 
     protected $enableMultipleReceivers = true; 
@@ -21,16 +19,6 @@ class ModuleOptions extends AbstractOptions implements
     protected $loginRoute = "zfcuser/login";
 
     protected $allowDeleteMessage = true;
-
-    public function setDisplayUserImage($displayUserImage)
-    {
-        $this->displayUserImage = $displayUserImage;
-    }
-
-    public function getDisplayUserImage()
-    {
-        return $this->displayUserImage;
-    }
 
     public function setSendEmailMessage($sendEmailMessage)
     {

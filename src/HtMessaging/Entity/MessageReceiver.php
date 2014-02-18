@@ -2,6 +2,8 @@
 
 namespace HtMessaging\Entity;
 
+use DateTime;
+
 class MessageReceiver extends AbstractMessageEntity implements MessageReceiverInterface
 {
 
@@ -33,7 +35,7 @@ class MessageReceiver extends AbstractMessageEntity implements MessageReceiverIn
         return $this->receiverId;
     }
 
-    public function setSentDateTime($sentDateTime)
+    public function setSentDateTime(DateTime $sentDateTime)
     {
         $this->sentDateTime = $sentDateTime;
     }
