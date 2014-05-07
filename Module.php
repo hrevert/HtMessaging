@@ -8,7 +8,6 @@ class Module
 
     public function onBootstrap(MvcEvent $e)
     {
-
         $sm = $e->getApplication()->getServiceManager();
         $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractController', MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
             $controller      = $e->getTarget();
@@ -17,7 +16,7 @@ class Module
             if ($moduleNamespace === __NAMESPACE__ && !$sm->get('zfcuser_auth_service')->hasIdentity()) {
                 return $controller->plugin("redirect")->toRoute($sm->get('HtMessaging\ModuleOptions')->getLoginRoute());
             }
-        }, 100); 
+        }, 100);
     }
 
     public function getConfig()
@@ -28,9 +27,6 @@ class Module
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
