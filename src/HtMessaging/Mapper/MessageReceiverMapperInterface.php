@@ -1,5 +1,5 @@
 <?php
-    
+
 namespace HtMessaging\Mapper;
 
 use HtMessaging\Entity\MessageInterface;
@@ -23,10 +23,6 @@ interface MessageReceiverMapperInterface
     public function findUnreadMessagesByReceiverId($receiverId, $paginated = false);
 
     public function findByReceiverIdAndMessageId($messageId, $receiverId, $joinWithMessage = false);
-
-    public function insert(MessageReceiverInterface $messageReceiver);
-
-    public function update(MessageReceiverInterface $messageReceiver, $where = null, $tableName = null, HydratorInterface $hydrator = null);
 
     public function deleteById($id) ;
 
