@@ -8,6 +8,7 @@ return array(
         'HtMessaging\MessageReceiverMapper' => 'HtMessaging\Factory\MessageReceiverMapperFactory',
         'htmessaging_user_mapper' => 'HtMessaging\Factory\UserMapperFactory',
         'HtMessaging\Service\MessagingService' => 'HtMessaging\Factory\MessagingServiceFactory',
+        'HtMessaging_navigation' => 'HtMessaging\Service\HtMessagingNavigationFactory',
     ),
     'invokables' => array(
         'HtMessaging\Service\EmailSender' => 'HtMessaging\Service\EmailSender',

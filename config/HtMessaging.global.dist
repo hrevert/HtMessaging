@@ -1,0 +1,12 @@
+<?php
+
+return array(
+    'navigation' => array(
+        'HtMessaging' => array(
+            array(
+                'label' => 'compose',
+                'route' => 'htmessaging/compose',
+            )
+        ),
+    ),
+);
