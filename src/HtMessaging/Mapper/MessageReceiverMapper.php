@@ -140,9 +140,9 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
      * @param HydratorInterface|null $hydrator
      * @return ResultInterface
      */
-    protected function insert($messageReceiver, $tableName = null, HydratorInterface $hydrator = null)
+    public function insert($messageReceiver, $tableName = null, HydratorInterface $hydrator = null)
     {
-        $messageReceiver->setSentDateTime(new SqlExpression("NOW()"));
+        $messageReceiver->setSentDateTime(new \DateTime());
         $result = parent::insert($messageReceiver);
         $messageReceiver->setId($result->getGeneratedValue());
 
