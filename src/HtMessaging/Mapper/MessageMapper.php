@@ -1,5 +1,5 @@
 <?php
-    
+
 namespace HtMessaging\Mapper;
 
 use ZfcBase\Mapper\AbstractDbMapper;
@@ -40,7 +40,7 @@ class MessageMapper extends AbstractDbMapper implements MessageMapperInteface
 
     public function insert(MessageInterface $message)
     {
-        $message->setCreatedDateTime(new SqlExpression("NOW()"));
+        $message->setCreatedDateTime(new \DateTime());
         $result = parent::insert($message);
         $message->setId($result->getGeneratedValue());
         return $result;
@@ -60,9 +60,9 @@ class MessageMapper extends AbstractDbMapper implements MessageMapperInteface
     {
         return $this->tableName;
     }
-    
+
     public function setTableName($tableName)
     {
         $this->tableName = $tableName;
-    } 
+    }
 }

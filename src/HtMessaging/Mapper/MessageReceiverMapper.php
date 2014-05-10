@@ -1,5 +1,5 @@
 <?php
-    
+
 namespace HtMessaging\Mapper;
 
 use ZfcBase\Mapper\AbstractDbMapper;
@@ -24,35 +24,35 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
     {
         return $this->tableName;
     }
-    
+
     public function setTableName($tableName)
     {
         $this->tableName = $tableName;
     }
-    
+
     public function setMessageTableName($messageTableName)
     {
         $this->messageTableName = $messageTableName;
     }
-    
+
     public function getMessageTableName()
     {
         return $this->messageTableName;
     }
-    
+
     public function findById($id)
     {
         $select = $this->getSelect();
         $select->where(array('id' => $id));
 
-        return $this->select($select)->current();        
-    }    
+        return $this->select($select)->current();
+    }
 
     public function findByMessageId($messageId)
     {
         $select = $this->getSelect();
         $select->where(array('message_id' => $messageId));
-        return $this->select($select);        
+        return $this->select($select);
     }
 
     public function findByMessage(MessageInterface $message)
@@ -83,7 +83,7 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
             return new Paginator(new DbSelect($select, $this->getDbAdapter()));
         }
 
-        return $this->select($select, new ArrayObject, new ObjectProperty);        
+        return $this->select($select, new ArrayObject, new ObjectProperty);
     }
 
     public function findImportantMessagesByReceiverId($receiverId, $paginated = false)
@@ -96,7 +96,7 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
             return new Paginator(new DbSelect($select, $this->getDbAdapter()));
         }
 
-        return $this->select($select, new ArrayObject, new ObjectProperty);          
+        return $this->select($select, new ArrayObject, new ObjectProperty);
     }
 
 
@@ -109,7 +109,7 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
             return new Paginator(new DbSelect($select, $this->getDbAdapter()));
         }
 
-        return $this->select($select, new ArrayObject, new ObjectProperty);          
+        return $this->select($select, new ArrayObject, new ObjectProperty);
     }
 
 
@@ -119,9 +119,9 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
         $select->where(array('receiver_id' => $receiverId, 'message_id' => $messageId));
         if ($joinWithMessage) {
             $this->joinWithMessage($select);
-            return $this->select($select, new ArrayObject, new ObjectProperty)->current();              
+            return $this->select($select, new ArrayObject, new ObjectProperty)->current();
         }
-         return $this->select($select)->current();      
+         return $this->select($select)->current();
     }
 
     protected function joinWithMessage(Select $select, $columns = array('sender_id', 'subject'))
@@ -130,20 +130,33 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
             $this->getMessageTableName(),
             $this->getMessageTableName() . '.id = ' . $this->getTableName() . '.message_id',
             $columns,
-            Select::JOIN_INNER 
-        );        
+            Select::JOIN_INNER
+        );
     }
 
-    public function insert(MessageReceiverInterface $messageReceiver)
+    /**
+     * @param object|array $entity
+     * @param string|TableIdentifier|null $tableName
+     * @param HydratorInterface|null $hydrator
+     * @return ResultInterface
+     */
+    public function insert($messageReceiver, $tableName = null, HydratorInterface $hydrator = null)
     {
-        $messageReceiver->setSentDateTime(new SqlExpression("NOW()"));
+        $messageReceiver->setSentDateTime(new \DateTime());
         $result = parent::insert($messageReceiver);
         $messageReceiver->setId($result->getGeneratedValue());
 
         return $result;
     }
 
-    public function update(MessageReceiverInterface $messageReceiver, $where = null, $tableName = null, HydratorInterface $hydrator = null)
+    /**
+     * @param object|array $entity
+     * @param string|array|closure $where
+     * @param string|TableIdentifier|null $tableName
+     * @param HydratorInterface|null $hydrator
+     * @return ResultInterface
+     */
+    protected function update($entity, $where, $tableName = null, HydratorInterface $hydrator = null)
     {
         if (!$where) {
             $where = array('id' => $messageReceiver->getId());
@@ -153,7 +166,7 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
 
     }
 
-    public function deleteById($id) 
+    public function deleteById($id)
     {
         return parent::delete(array('id' => $id));
     }

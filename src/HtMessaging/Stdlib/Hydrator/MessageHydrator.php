@@ -24,11 +24,11 @@ class MessageHydrator extends AbstractMessageHydrator
     {
         if (!$message instanceof MessageInterface) {
             throw new Exception\InvalidClassException('Instance of `HtMessaging\Entity\MessageInterface` expected!');
-        } 
-        
+        }
+
         $data = parent::extract($message);
-        
-        $data['created_date_time'] = $object['created_date_time']->format(static::DATETIME_MYSQL);
+
+        $data['created_date_time'] = $data['created_date_time']->format(static::DATETIME_MYSQL);
 
         unset($data['is_starred']);
         unset($data['is_important']);
