@@ -1,12 +1,14 @@
 <?php
 
 return array(
-    /*
-     * Dow we want to show the navigation menu inside the messaging module.
-     * To go from inbox to outbox and to the compose dirtectly?
-     * Default value: TRUE
-     */
-    'ShowMenu' => true,
+    'htmessaging' => array(
+        /*
+         * Dow we want to show the navigation menu inside the messaging module.
+         * To go from inbox to outbox and to the compose dirtectly?
+         * Default value: TRUE
+         */
+        'showMenu' => true,
+    ),
 
     'navigation' => array(
         'HtMessaging' => array(
