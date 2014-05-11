@@ -44,8 +44,9 @@ class Module
     {
         return array(
             'invokables' => array(
-                'htSmartTime' => 'HtMessaging\View\Helper\SmartTime',
-                'htmessagingComparer' => 'HtMessaging\View\Helper\Comparer',
+                'htSmartTime'           => 'HtMessaging\View\Helper\SmartTime',
+                'htmessagingComparer'   => 'HtMessaging\View\Helper\Comparer',
+                'menu_helper'           => 'HtMessaging\View\Helper\Menuhelper'
             )
         );
     }

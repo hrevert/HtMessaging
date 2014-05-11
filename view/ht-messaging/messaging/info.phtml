@@ -3,6 +3,8 @@
 $title = $message->getSubject();
 $title = $this->escapeHtml($title);
 $this->headTitle($title);
+
+echo $this->menu_helper();
 ?>
 <h2><?php echo $title; ?></h2>
 <br/>

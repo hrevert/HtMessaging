@@ -2,17 +2,19 @@
     $title = ucfirst($type) . " Messages";
     $title = $this->escapeHtml($title);
     $this->headTitle($title);
-    $this->headScript()->appendFile($this->basePath()."/ht-messaging/js/messaging.js"); 
-    $this->headLink()->appendStylesheet($this->basePath()."/ht-messaging/css/messaging.css"); 
+    $this->headScript()->appendFile($this->basePath()."/ht-messaging/js/messaging.js");
+    $this->headLink()->appendStylesheet($this->basePath()."/ht-messaging/css/messaging.css");
+
+    echo $this->menu_helper();
 ?>
 <h2><?= $title ?></h2>
 <br/>
 <?php if ($type === 'inbox' || $type === 'unread'): ?>
     <div class="btn-group">
-        <a class="btn btn-default mark-all">Mark All</a> 
-        <a class="btn btn-default unmark-all">Unmark All</a> 
-        <a class="btn btn-default read-unread" data-new-value="read">Mark as read</a> 
-        <a class="btn btn-default read-unread" data-new-value="unread">Mark as unread</a> 
+        <a class="btn btn-default mark-all">Mark All</a>
+        <a class="btn btn-default unmark-all">Unmark All</a>
+        <a class="btn btn-default read-unread" data-new-value="read">Mark as read</a>
+        <a class="btn btn-default read-unread" data-new-value="unread">Mark as unread</a>
     </div>
     <br/>
     <br/>

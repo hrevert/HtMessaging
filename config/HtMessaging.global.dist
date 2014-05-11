@@ -1,12 +1,30 @@
 <?php
 
 return array(
+    /*
+     * Dow we want to show the navigation menu inside the messaging module.
+     * To go from inbox to outbox and to the compose dirtectly?
+     * Default value: TRUE
+     */
+    'ShowMenu' => true,
+
     'navigation' => array(
         'HtMessaging' => array(
             array(
-                'label' => 'compose',
+                'label' => 'Inbox',
+                'route' => 'htmessaging',
+            ),
+            array(
+                'label'  => 'Outbox',
+                'route'  => 'htmessaging/list',
+                'params' => array(
+                    'type'       => 'sent',
+                ),
+            ),
+            array(
+                'label' => 'Compose',
                 'route' => 'htmessaging/compose',
-            )
+            ),
         ),
     ),
 );

@@ -1,5 +1,5 @@
 <?php
-    
+
 namespace HtMessaging\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -70,9 +70,12 @@ class MessagingController extends AbstractActionController
 
         $type = $this->params()->fromRoute('type', 'inbox');
 
-        $viewModel = new ViewModel(array(
-            'type' => $type
-        ));
+        $viewModel = new ViewModel(
+            array(
+                'type'      => $type,
+                'showMenu'  => $this->getModuleOptions()->getShowMenu(),
+            )
+        );
 
         switch ($type)
         {
@@ -133,7 +136,7 @@ class MessagingController extends AbstractActionController
         if (!$message or !$this->getMessagingService()->isValidSender($message)) {
             return $this->notFoundAction();
         }
-        
+
         $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
 
         $messageReceivers = iterator_to_array($messageReceivers);
@@ -145,7 +148,7 @@ class MessagingController extends AbstractActionController
             'messageReceivers' => $messageReceivers,
             'receivers' => $receivers
         );
-            
+
     }
 
     /**
@@ -162,7 +165,7 @@ class MessagingController extends AbstractActionController
 
         if (!$message) {
             return $this->notFoundAction();
-        }  
+        }
 
         $receiver = $this->getServiceLocator()->get('zfcuser_auth_service')->getIdentity();
 
@@ -197,9 +200,9 @@ class MessagingController extends AbstractActionController
         // if message is not found or the user is not sender(i.e. not allowed to view messages sent by other users)
         if (!$message or !$this->getMessagingService()->isValidSender($message)) {
             return $this->notFoundAction();
-        } 
-        
-        
+        }
+
+
         $messageReceivers = $this->getMessageReceiverMapper()->findByMessage($message);
 
         $vm = new ViewModel(array(
@@ -209,10 +212,10 @@ class MessagingController extends AbstractActionController
 
         if (count($messageReceivers) === 1) {
             $receiver = $this->getUserMapper()->findById($messageReceivers->current()->getReceiverId());
-            $vm->setVariable('receiver', $receiver); 
+            $vm->setVariable('receiver', $receiver);
         }
-        
-        return $vm;         
+
+        return $vm;
     }
 
     /**
@@ -245,8 +248,8 @@ class MessagingController extends AbstractActionController
         if (!$type || $id) {
             return $this->notFoundAction();
         }
-        
-        $message = $this->getMessageMapper()->findById($id); 
+
+        $message = $this->getMessageMapper()->findById($id);
         if (!$message) {
             return $this->notFoundAction();
         }
@@ -284,8 +287,8 @@ class MessagingController extends AbstractActionController
         if (!$type || $id) {
             return $this->notFoundAction();
         }
-        
-        $messageReceiver = $this->getMessageReceiverMapper()->findById($id); 
+
+        $messageReceiver = $this->getMessageReceiverMapper()->findById($id);
         if (!$messageReceiver) {
             return $this->notFoundAction();
         }
@@ -298,7 +301,7 @@ class MessagingController extends AbstractActionController
                 } else {
                     $messageReceiver->setUnstarred();
                 }
-                
+
                 break;
             case "important":
                 if ($messageReceiver->isImportant()) {
@@ -314,7 +317,7 @@ class MessagingController extends AbstractActionController
 
         return new JsonModel(array(
             'changed' => true
-        ));        
+        ));
     }
 
     /**
@@ -336,8 +339,8 @@ class MessagingController extends AbstractActionController
         if (!$this->messageReceiverMapper) {
             $this->messageReceiverMapper = $this->getServiceLocator()->get('HtMessaging\MessageReceiverMapper');
         }
-        
-        return $this->messageReceiverMapper;         
+
+        return $this->messageReceiverMapper;
     }
 
     /**

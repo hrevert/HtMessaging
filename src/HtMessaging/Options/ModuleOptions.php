@@ -1,82 +1,130 @@
 <?php
-    
+
 namespace HtMessaging\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
-class ModuleOptions extends AbstractOptions implements 
+class ModuleOptions extends AbstractOptions implements
     EntityOptionsInterface,
     MultipleReceiversOptionsInterface
 {
     protected $sendEmailMessage = false;
-
-    protected $enableMultipleReceivers = true; 
-
+    protected $enableMultipleReceivers = true;
     protected $messageEntityClass = "HtMessaging\Entity\Message";
-
     protected $messageReceiverEntityClass = "HtMessaging\Entity\MessageReceiver";
-
     protected $loginRoute = "zfcuser/login";
-
     protected $allowDeleteMessage = true;
+    protected $showMenu = true;
 
-    public function setSendEmailMessage($sendEmailMessage)
-    {
-        $this->sendEmailMessage = $sendEmailMessage;
-    }
-
+	/**
+     * @return the $sendEmailMessage
+     */
     public function getSendEmailMessage()
     {
         return $this->sendEmailMessage;
     }
 
-    public function setEnableMultipleReceivers($enableMultipleReceivers)
+	/**
+     * @param boolean $sendEmailMessage
+     */
+    public function setSendEmailMessage($sendEmailMessage)
     {
-        $this->enableMultipleReceivers = $enableMultipleReceivers;
+        $this->sendEmailMessage = $sendEmailMessage;
     }
 
+	/**
+     * @return the $enableMultipleReceivers
+     */
     public function getEnableMultipleReceivers()
     {
         return $this->enableMultipleReceivers;
     }
 
-    public function setMessageEntityClass($messageEntityClass)
+	/**
+     * @param boolean $enableMultipleReceivers
+     */
+    public function setEnableMultipleReceivers($enableMultipleReceivers)
     {
-        $this->messageEntityClass = $messageEntityClass;
+        $this->enableMultipleReceivers = $enableMultipleReceivers;
     }
 
+	/**
+     * @return the $messageEntityClass
+     */
     public function getMessageEntityClass()
     {
         return $this->messageEntityClass;
     }
 
-    public function setMessageReceiverEntityClass($messageReceiverEntityClass)
+	/**
+     * @param string $messageEntityClass
+     */
+    public function setMessageEntityClass($messageEntityClass)
     {
-        $this->messageReceiverEntityClass = $messageReceiverEntityClass;
+        $this->messageEntityClass = $messageEntityClass;
     }
 
+	/**
+     * @return the $messageReceiverEntityClass
+     */
     public function getMessageReceiverEntityClass()
     {
         return $this->messageReceiverEntityClass;
     }
 
-    public function setLoginRoute($loginRoute)
+	/**
+     * @param string $messageReceiverEntityClass
+     */
+    public function setMessageReceiverEntityClass($messageReceiverEntityClass)
     {
-        $this->loginRoute = $loginRoute;
+        $this->messageReceiverEntityClass = $messageReceiverEntityClass;
     }
 
+	/**
+     * @return the $loginRoute
+     */
     public function getLoginRoute()
     {
         return $this->loginRoute;
     }
 
+	/**
+     * @param string $loginRoute
+     */
+    public function setLoginRoute($loginRoute)
+    {
+        $this->loginRoute = $loginRoute;
+    }
+
+	/**
+     * @return the $allowDeleteMessage
+     */
+    public function getAllowDeleteMessage()
+    {
+        return $this->allowDeleteMessage;
+    }
+
+	/**
+     * @param boolean $allowDeleteMessage
+     */
     public function setAllowDeleteMessage($allowDeleteMessage)
     {
         $this->allowDeleteMessage = $allowDeleteMessage;
     }
 
-    public function getAllowDeleteMessage()
+	/**
+     * @return the $showMenu
+     */
+    public function getShowMenu()
     {
-        return $this->allowDeleteMessage;
+        return $this->showMenu;
+    }
+
+	/**
+     * @param boolean $showMenu
+     */
+    public function setShowMenu($showMenu)
+    {
+        $this->showMenu = $showMenu;
     }
 }

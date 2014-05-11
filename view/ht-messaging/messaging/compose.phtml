@@ -1,7 +1,9 @@
 <?php
 $title = "Compose Message";
 $this->headTitle($title);
-$this->headScript()->appendFile($this->basePath()."/ht-messaging/js/select2.js"); 
+$this->headScript()->appendFile($this->basePath()."/ht-messaging/js/select2.js");
+
+echo $this->menu_helper();
 ?>
 <h2><?php echo $title; ?></h2>
 <br/>
