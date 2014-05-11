@@ -60,7 +60,8 @@ class MessagingController extends AbstractActionController
 
         return array(
             'form' => $form,
-            'messageSent' => $messageSent
+            'messageSent' => $messageSent,
+            'showMenu'  => $this->getModuleOptions()->getShowMenu(),
         );
     }
 
@@ -146,7 +147,8 @@ class MessagingController extends AbstractActionController
         return array(
             'message' => $message,
             'messageReceivers' => $messageReceivers,
-            'receivers' => $receivers
+            'receivers' => $receivers,
+            'showMenu'  => $this->getModuleOptions()->getShowMenu(),
         );
 
     }
@@ -181,7 +183,8 @@ class MessagingController extends AbstractActionController
         return new ViewModel(array(
             'message' => $message,
             'messageReceiver' => $messageReceiver,
-            'sender' => $sender
+            'sender' => $sender,
+            'showMenu'  => $this->getModuleOptions()->getShowMenu(),
         ));
     }
 
@@ -207,7 +210,8 @@ class MessagingController extends AbstractActionController
 
         $vm = new ViewModel(array(
             'message' => $message,
-            'messageReceivers' => $messageReceivers
+            'messageReceivers' => $messageReceivers,
+            'showMenu'  => $this->getModuleOptions()->getShowMenu(),
         ));
 
         if (count($messageReceivers) === 1) {
