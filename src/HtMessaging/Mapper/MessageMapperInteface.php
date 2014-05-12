@@ -12,8 +12,8 @@ interface MessageMapperInteface
 
     public function findBySenderId($senderId, $paginated = false);
 
-    public function insert(MessageInterface $message);
+    public function insert($message, $tablename = null, HydratorInterface $hydrator = null);
 
-    public function update(MessageInterface $message, $where = null, $tableName = null, HydratorInterface $hydrator = null);
+    public function update($message, $where = null, $tableName = null, HydratorInterface $hydrator = null);
 
 }

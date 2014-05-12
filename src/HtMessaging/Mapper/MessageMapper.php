@@ -38,22 +38,21 @@ class MessageMapper extends AbstractDbMapper implements MessageMapperInteface
         return $this->findBySenderId($sender->getId());
     }
 
-    public function insert(MessageInterface $message)
+    public function insert($message, $tablename = null, HydratorInterface $hydrator = null)
     {
         $message->setCreatedDateTime(new \DateTime());
-        $result = parent::insert($message);
+        $result = parent::insert($message, $tablename, $hydrator);
         $message->setId($result->getGeneratedValue());
         return $result;
     }
 
-    public function update(MessageInterface $message, $where = null, $tableName = null, HydratorInterface $hydrator = null)
+    public function update($message, $where = null, $tableName = null, HydratorInterface $hydrator = null)
     {
         if (!$where) {
             $where = array('id' => $message->getId());
         }
 
         return parent::update($message, $where, $tableName, $hydrator);
-
     }
 
     public function getTableName()

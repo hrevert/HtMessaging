@@ -156,7 +156,7 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
      * @param HydratorInterface|null $hydrator
      * @return ResultInterface
      */
-    public function update($messageReceiver, $where, $tableName = null, HydratorInterface $hydrator = null)
+    public function update($messageReceiver, $where = "", $tableName = null, HydratorInterface $hydrator = null)
     {
         if (!$where) {
             $where = array('id' => $messageReceiver->getId());
