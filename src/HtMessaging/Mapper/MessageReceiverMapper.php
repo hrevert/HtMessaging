@@ -171,7 +171,7 @@ class MessageReceiverMapper extends AbstractDbMapper implements MessageReceiverM
         return parent::delete(array('id' => $id));
     }
 
-    public function delete(MessageReceiverInterface $messageReceiver)
+    public function remove(MessageReceiverInterface $messageReceiver)
     {
         return $this->deleteById($messageReceiver->getId());
     }

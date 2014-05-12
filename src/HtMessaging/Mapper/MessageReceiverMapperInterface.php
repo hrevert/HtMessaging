@@ -26,5 +26,5 @@ interface MessageReceiverMapperInterface
 
     public function deleteById($id) ;
 
-    public function delete(MessageReceiverInterface $messageReceiver);
+    public function remove(MessageReceiverInterface $messageReceiver);
 }
